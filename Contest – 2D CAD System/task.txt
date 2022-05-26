@@ -1,0 +1,24 @@
+The problem is to develop a set of classes supporting efficient manipulation with 2D geometric shapes.
+
+The classes will allow quick selection of 2D objects in a drawing. The drawing may contain only four kinds of primitive objects: rectangles, circles, triangles, and convex polygons. Each object is represented by a class: CRectangle, CCircle, CTriangle, and CPolygon, respectively. All objects have their unique identifier -- an integer ID. The ID as well as the dimensions of the object are passed as constructor arguments.
+
+CRectangle ( int ID, int x1, int y1, int x2, int y2 ) represents a rectangle. The rectangle is given by a pair of opposite corners (neither x1 < x2 nor y1 < y2 is guaranteed),
+CCircle ( int ID, int x, int y, int r) represents a circle given by its center point and a radius,
+CTriangle ( int ID, CCoord a, CCoord b, CCoord c) represents a triangle, the triangle is given by its vertices. The structure CCoord is defined in the testing environment (see note below),
+CPolygon ( int ID, vertices) represents a convex polygon. The polygon has is defined by a list of its vertices. The vertices, however, may be provided in many ways:
+by two pointers defining a range in an array of CCoord, e.g.: CPolygon ( 1, v, v + 5 )
+by two iterators that define a range in a container, e.g.: CPolygon ( 1, v . begin (), v . end () )
+by means of a std::initializer_list, e.g.: CPolygon ( 1, { CCoord ( 1, 2 ), CCoord ( 5, 7 ), CCoord ( 10, -3 ), ... } )
+by a list of CCoord instances (the list may be quite long), e.g.: CPolygon ( 1, CCoord ( 1, 2 ), CCoord ( 5, 7 ), CCoord ( 10, -3 ), ... )
+To store and manipulate the objects, a container CScreen must be provided. The container must provide the following interface:
+
+default constructor (creates a new object representing an empty drawing),
+destructor,
+method add which adds a new object to the drawing,
+method optimize to optimize the representation of CScreen. The method is called before the first invocation of method test, but only if there was any modification since the previous call to optimize. The method may be empty if your implementation stores the shapes efficiently in add.
+method vector<int> test (int x, int y ), which finds all objects in the drawing such that coordinate x,y is inside them. The method will return the IDs of the objects it finds. If the list is empty, the method must return an empty vector.
+When designing the container, pay special attention to the internal representation. We want really fast searching in the drawing (mouse response must be instant). You may safely assume that the scene contains a lot of objects (e.g. 100000) and that the number of tests is much higher than the number of add operations.
+
+The difficulty of the task is both design (inefficient design of class interfaces may lead to lengthy code) as well as algorithms (inefficient storage may cause the program to be very slow). The task is a contest task. You will be awarded some points for a correct solution and some more points for a solution which is faster than other student's solution. The contest homework implies that the teachers will provide only a limited support.
+
+The interface and some example tests are included in the attached archive..
